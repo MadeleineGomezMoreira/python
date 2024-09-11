@@ -1,12 +1,10 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
-from people import people_page
 from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, CHAR
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 app = Flask(__name__)
-app.register_blueprint(people_page, url_prefix="/people")
 app.secret_key = "secretKey"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -14,6 +12,28 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 @app.route("/home")
 def home():
     return "<h1>Home</h1>"
+
+#display all people
+@app.route("/people/show")
+def show_people():
+        all_people = people.query.all()
+        return render_template("people.html", values = all_people)
+
+#add a person
+@app.route("/people/add", methods=["GET", "POST"])
+def add_person():
+        if request.method == "POST":
+                name = request.form["name"]
+                email = request.form["email"]
+                
+                new_person = people(name, email)
+                db.session.add(new_person)
+                db.session.commit()
+                
+                flash("Person added successfully!")
+                return redirect(url_for("show_people"))
+        
+        return render_template("add_person.html")
 
 db = SQLAlchemy(app)
 
@@ -26,13 +46,14 @@ class people(db.Model):
         self.name = name
         self.email = email
 
-
-person = people(1, "Juan", "juanCedros@gmail.com")
-db.session.add(person)
-db.session.commit()
-
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
+        
+        #adding a person to the database after creation
+        person = people("Juan", "juanCedros@gmail.com")
+        db.session.add(person)
+        db.session.commit()
+        
     app.run(debug=True)
     
