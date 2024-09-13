@@ -1,0 +1,4 @@
+Project Layout -> flask.palletsprojects.com/en/3.0.x/tutorial/layout
+
+Application Setup -> flask.palletsprojects.com/en/3.0.x/tutorial/factory
+
