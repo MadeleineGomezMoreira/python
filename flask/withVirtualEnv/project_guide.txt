@@ -1,4 +1,7 @@
-Project Layout -> flask.palletsprojects.com/en/3.0.x/tutorial/layout
+Project Layout -> flask.palletsprojects.com/en/3.0.x/tutorial/layout/
 
-Application Setup -> flask.palletsprojects.com/en/3.0.x/tutorial/factory
+Application Setup -> flask.palletsprojects.com/en/3.0.x/tutorial/factory/
 
+Database Access -> flask.palletsprojects.com/en/3.0.x/tutorial/database/
+
+Blueprints and Views -> flask.palletsprojects.com/en/3.0.x/tutorial/views/
