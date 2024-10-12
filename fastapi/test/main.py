@@ -1,10 +1,17 @@
 from fastapi import FastAPI
 from enum import Enum
+from pydantic import BaseModel
 
 class ModelName(str, Enum):
     alexnet = "alexnet"
     resnet = "resnet"
     lenet = "lenet"
+    
+class User(BaseModel):
+    username:str
+    password:str
+    age:int
+    height:float | None = None 
 
 app = FastAPI()
 
@@ -45,6 +52,18 @@ async def read_item_optional(item_id: str, q: str | None = None):
     if q:
         return {"item_id": item_id, "q" : q}
     return{"item_id": item_id}
+
+#booleans can be converted no matter if how you call them: 1/0 - True/False - true/false - on/off - yes/no
+
+#REQUEST BODY
+
+#we declared user as a parameter we receive through the body
+@app.post("/users")
+async def create_iuser(user : User):
+    user.username = user.username.upper()
+    return user
+
+
 
 
     
