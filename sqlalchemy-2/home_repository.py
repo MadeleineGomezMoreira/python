@@ -1,37 +1,37 @@
 from models import Home
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 # TODO: implement error handling
 
 
 # Save a new home
-def save_home(session: Session, home: Home):
+async def save_home(session: AsyncSession, home: Home):
     session.add(home)
     session.commit()
     return home
 
 
 # Update an existing home (works the same as save)
-def update_home(session: Session, home: Home):
+async def update_home(session: AsyncSession, home: Home):
     session.add(home)
-    session.commit()
+    await session.commit()
 
 
 # Find all homes
-def get_all_homes(session: Session):
+async def get_all_homes(session: AsyncSession):
     return session.query(Home).all()
 
 
 # Find all homes by owner
-def get_all_homes_by_owner(session: Session, owner_id: int):
+async def get_all_homes_by_owner(session: AsyncSession, owner_id: int):
     return session.query(Home).filter_by(owned_by=owner_id).all()
 
 
 # Find a home by home_id
-def get_home_by_id(session: Session, home_id: int):
+async def get_home_by_id(session: AsyncSession, home_id: int):
     return session.query(Home).filter_by(id=home_id).first()
 
 
 # Find a home by owner (owned_by -> user.id)
-def get_home_by_owner(session: Session, owner_id: int):
+async def get_home_by_owner(session: AsyncSession, owner_id: int):
     return session.query(Home).filter_by(owned_by=owner_id).first()
