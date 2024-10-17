@@ -1,13 +1,17 @@
 from models import User
+from pyd_models import UserCreate
+from user_mapper import map_userCreate_to_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 
 # Save a new user
-async def save_user(session: AsyncSession, user: User):
-    session.add(user)
+async def save_user(session: AsyncSession, user: UserCreate):
+    mapped_user = map_userCreate_to_user(user)
+    session.add(mapped_user)
     await session.commit()
-    return user
+    await session.refresh(mapped_user)
+    return mapped_user
 
 
 # Delete an existing user by user.id
@@ -16,7 +20,7 @@ async def delete_user(session: AsyncSession, user_id: int):
 
     if user:
         session.delete(user)
-        session.commit()
+        await session.commit()
 
 
 # Update an existing user (works the same as save)
@@ -32,6 +36,7 @@ async def get_all_users(session: AsyncSession):
     return result.scalars().all()
 
 
+# TODO:change this to use select instead of query
 # Find a user by user_id
 async def get_user_by_id(session: AsyncSession, user_id: int):
     return session.query(User).filter_by(id=user_id).first()

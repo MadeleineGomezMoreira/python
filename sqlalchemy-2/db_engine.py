@@ -9,34 +9,6 @@ engine = create_async_engine(
 )
 SessionLocal = async_sessionmaker(engine)
 
-
-def input_sample_data():
-
-    with SessionLocal() as session:
-
-        print("Inputting sample data...")  # Agregar esta línea para verificar
-
-        user1 = User(
-            username="username1",
-            email="user1email@gmail.com",
-            password="user1password",
-        )
-
-        session.add(user1)
-        session.commit()
-
-        # Query the inserted user to retrieve its id
-        user = session.query(User).first()
-
-        home1 = Home(
-            home_name="Home1",
-            owner=user,  # We use the relationship between the two entities to assign the user (owned_by)
-        )
-
-        session.add(home1)
-        session.commit()
-
-
 # This will get the DB Session for each request
 
 
@@ -48,4 +20,4 @@ async def get_db():
     try:
         yield db
     finally:
-        db.close()
+        await db.close()

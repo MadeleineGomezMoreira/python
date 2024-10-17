@@ -10,7 +10,7 @@ class Base(DeclarativeBase):
 class User(Base):
     __tablename__ = "user"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     username: Mapped[str] = mapped_column(String(30))
     email: Mapped[str] = mapped_column(String(100))
     password: Mapped[str] = mapped_column(String(100))
@@ -26,7 +26,7 @@ class User(Base):
     homes: Mapped[list["Home"]] = relationship(back_populates="owner")
 
     def __repr__(self) -> str:
-        return f"User(id={self.id!r}, name={self.username!r}, email ={self.email!r}, activated={self.activated!r})"
+        return f"User(id={self.id!r}, username={self.username!r}, email ={self.email!r}, password = {self.password!r}, activated={self.activated!r}, activation_date = {self.activation_date!r}, activation_code = {self.activation_code!r})"
 
 
 class Home(Base):
